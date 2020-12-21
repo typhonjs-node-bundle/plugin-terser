@@ -1,6 +1,6 @@
 {
   "name": "plugin-terser",
-  "description": "Provides an Oclif plugin to add PostCSS configured for Sass to rollup-runner.",
+  "description": "Provides an Oclif plugin to to configure rollup-plugin-terser for rollup-runner.",
   "version": "0.0.0",
   "author": "typhonrt",
   "bugs": "https://github.com/typhonjs-node-bundle/plugin-terser/issues",
