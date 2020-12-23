@@ -22,19 +22,6 @@ class PluginHandler
     */
    static onPluginLoad(ev)
    {
-      const eventbus = ev.eventbus;
-
-      let eventPrepend = '';
-
-      const options = ev.pluginOptions;
-
-      // Apply any plugin options.
-      if (typeof options === 'object')
-      {
-         // If `eventPrepend` is defined then it is prepended before all event bindings.
-         if (typeof options.eventPrepend === 'string') { eventPrepend = `${options.eventPrepend}:`; }
-      }
-
       // TODO: ADD EVENT REGISTRATION
       // eventbus.on(`${eventPrepend}test`, PluginHandler.test, PluginHandler);
    }
@@ -49,37 +36,49 @@ class PluginHandler
  */
 module.exports = async function(opts)
 {
-   process.pluginManager.add({ name: 'plugin-terser', instance: PluginHandler });
+   try
+   {
+      process.pluginManager.add({ name: 'plugin-terser', instance: PluginHandler });
 
-   // Adds flags for various built in commands like `build`.
-   s_ADD_FLAGS(opts.id);
+      // Adds flags for various built in commands like `build`.
+      s_ADD_FLAGS(opts.id);
 
-   // TODO REMOVE
-   process.stdout.write(`plugin-terser init hook running ${opts.id}\n`);
+      // TODO REMOVE
+      process.stdout.write(`plugin-terser init hook running ${opts.id}\n`);
+   }
+   catch (error)
+   {
+      this.error(error);
+   }
 };
 
 /**
  * Adds flags for various built in commands like `build`.
  *
- * @param {string} commandID - ID of the command being run.
+ * @param {string} command - ID of the command being run.
  */
-function s_ADD_FLAGS(commandID)
+function s_ADD_FLAGS(command)
 {
-   switch (commandID)
+   switch (command)
    {
       // Add all built in flags for the build command.
       case 'build':
-         process.eventbus.trigger('oclif:flaghandler:add', {
-            // By default compress is set to true, but if the environment variable `DEPLOY_COMPRESS` is defined as
-            // 'true' or 'false' that will determine the setting for compress.
-            compress: flags.boolean({
-               'description': 'Compress output using Terser.', 'default': function()
-               {
-                  if (process.env.DEPLOY_COMPRESS === 'true') { return true; }
+         process.eventbus.trigger('oclif:system:flaghandler:add', {
+            command,
+            plugin: 'plugin-terser',
+            flags: {
+               // By default compress is set to true, but if the environment variable `DEPLOY_COMPRESS` is defined as
+               // 'true' or 'false' that will determine the setting for compress.
+               compress: flags.boolean({
+                  'description': 'Compress output using Terser.', 'default': function()
+                  {
+                     if (process.env.DEPLOY_COMPRESS === 'true')
+                     { return true; }
 
-                  return process.env.DEPLOY_COMPRESS !== 'false';
-               }
-            }),
+                     return process.env.DEPLOY_COMPRESS !== 'false';
+                  }
+               }),
+            }
          });
          break;
    }
