@@ -70,14 +70,15 @@ function s_ADD_FLAGS(command)
                // By default compress is set to true, but if the environment variable `DEPLOY_COMPRESS` is defined as
                // 'true' or 'false' that will determine the setting for compress.
                compress: flags.boolean({
-                  'description': 'Compress output using Terser.', 'default': function()
+                  'description': '[default: true] Compress output using Terser.',
+                  'allowNo': true,
+                  'default': function()
                   {
-                     if (process.env.DEPLOY_COMPRESS === 'true')
-                     { return true; }
+                     if (process.env.DEPLOY_COMPRESS === 'true') { return true; }
 
                      return process.env.DEPLOY_COMPRESS !== 'false';
                   }
-               }),
+               })
             }
          });
          break;
