@@ -38,7 +38,7 @@ module.exports = async function(opts)
 {
    try
    {
-      process.pluginManager.add({ name: 'plugin-terser', instance: PluginHandler });
+      global.$$pluginManager.add({ name: 'plugin-terser', instance: PluginHandler });
 
       // Adds flags for various built in commands like `build`.
       s_ADD_FLAGS(opts.id);
@@ -63,7 +63,7 @@ function s_ADD_FLAGS(command)
    {
       // Add all built in flags for the build command.
       case 'build':
-         process.eventbus.trigger('oclif:system:flaghandler:add', {
+         global.$$eventbus.trigger('typhonjs:oclif:system:flaghandler:add', {
             command,
             plugin: 'plugin-terser',
             flags: {
