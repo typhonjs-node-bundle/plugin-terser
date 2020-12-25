@@ -1,4 +1,21 @@
+const { terser }  = require('rollup-plugin-terser');
+
 const { flags }   = require('@oclif/command');
+
+const s_TEST_CONFIG = {
+   compress: {
+      booleans_as_integers: true,
+      passes: 3
+   },
+
+   mangle: {
+      toplevel: true
+   },
+
+   ecma: 2020,
+
+   module: true
+};
 
 /**
  * Handles interfacing with the plugin manager adding event bindings to pass back a configured
@@ -7,9 +24,20 @@ const { flags }   = require('@oclif/command');
 class PluginHandler
 {
    /**
-    * @returns {string}
+    * Returns the configured input plugin for `rollup-plugin-terser`
+    *
+    * @param {object} config        - The CLI config
+    * @param {object} config.flags  - The CLI config
+    *
+    * @returns {object} Rollup plugin
     */
-   static test() { return 'some testing'; }
+   static getOutputPlugin(config = {})
+   {
+      if (config.flags && config.flags.compress === true)
+      {
+         return terser(s_TEST_CONFIG);
+      }
+   }
 
    /**
     * Wires up PluginHandler on the plugin eventbus.
@@ -22,8 +50,7 @@ class PluginHandler
     */
    static onPluginLoad(ev)
    {
-      // TODO: ADD EVENT REGISTRATION
-      // eventbus.on(`${eventPrepend}test`, PluginHandler.test, PluginHandler);
+      ev.eventbus.on('typhonjs:oclif:rollup:plugins:output:get', PluginHandler.getOutputPlugin, PluginHandler);
    }
 }
 
@@ -38,7 +65,7 @@ module.exports = async function(opts)
 {
    try
    {
-      global.$$pluginManager.add({ name: 'plugin-terser', instance: PluginHandler });
+      global.$$pluginManager.add({ name: '@typhonjs-node-bundle/plugin-terser', instance: PluginHandler });
 
       // Adds flags for various built in commands like `build`.
       s_ADD_FLAGS(opts.id);
