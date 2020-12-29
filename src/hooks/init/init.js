@@ -50,7 +50,7 @@ class PluginHandler
     */
    static onPluginLoad(ev)
    {
-      ev.eventbus.on('typhonjs:oclif:rollup:plugins:output:get', PluginHandler.getOutputPlugin, PluginHandler);
+      ev.eventbus.on('typhonjs:oclif:rollup:plugins:main:output:get', PluginHandler.getOutputPlugin, PluginHandler);
    }
 }
 
@@ -89,7 +89,7 @@ function s_ADD_FLAGS(command)
    switch (command)
    {
       // Add all built in flags for the build command.
-      case 'build':
+      case 'bundle':
          global.$$eventbus.trigger('typhonjs:oclif:system:flaghandler:add', {
             command,
             plugin: 'plugin-terser',
