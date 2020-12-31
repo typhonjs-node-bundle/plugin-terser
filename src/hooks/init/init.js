@@ -26,14 +26,14 @@ class PluginHandler
    /**
     * Returns the configured input plugin for `rollup-plugin-terser`
     *
-    * @param {object} config        - The CLI config
-    * @param {object} config.flags  - The CLI config
+    * @param {object} bundleData - The CLI config
+    * @param {object} bundleData.cliFlags - The CLI flags
     *
     * @returns {object} Rollup plugin
     */
-   static getOutputPlugin(config = {})
+   static getOutputPlugin(bundleData = {})
    {
-      if (config.flags && config.flags.compress === true)
+      if (bundleData.cliFlags && bundleData.cliFlags.compress === true)
       {
          return terser(s_TEST_CONFIG);
       }
