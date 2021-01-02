@@ -50,8 +50,8 @@ class PluginHandler
     */
    static onPluginLoad(ev)
    {
-      ev.eventbus.on('typhonjs:oclif:rollup:plugins:main:output:get', PluginHandler.getOutputPlugin, PluginHandler);
-      ev.eventbus.on('typhonjs:oclif:rollup:plugins:npm:input:get', PluginHandler.getOutputPlugin, PluginHandler);
+      ev.eventbus.on('typhonjs:oclif:bundle:plugins:main:output:get', PluginHandler.getOutputPlugin, PluginHandler);
+      ev.eventbus.on('typhonjs:oclif:bundle:plugins:npm:input:get', PluginHandler.getOutputPlugin, PluginHandler);
    }
 }
 
