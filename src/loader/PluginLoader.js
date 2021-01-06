@@ -53,7 +53,7 @@ class PluginLoader
          case 'bundle':
             eventbus.trigger('typhonjs:oclif:system:flaghandler:add', {
                command,
-               plugin: 'plugin-terser',
+               plugin: PluginLoader.pluginName,
                flags: {
                   // By default compress is set to true, but if the environment variable `{prefix}_COMPRESS` is defined
                   // as 'true' or 'false' that will determine the setting for compress.
