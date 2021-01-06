@@ -1,8 +1,8 @@
-const { terser }  = require('rollup-plugin-terser');
+const { terser }     = require('rollup-plugin-terser');
+const { flags }      = require('@oclif/command');
+const { FileUtil }   = require('@typhonjs-node-bundle/oclif-commons');
 
-const { flags }   = require('@oclif/command');
-
-const s_TEST_CONFIG = {
+const s_DEFAULT_CONFIG = {
    compress: {
       booleans_as_integers: true,
       passes: 3
@@ -88,8 +88,46 @@ class PluginLoader
    {
       if (bundleData.cliFlags && bundleData.cliFlags.compress === true)
       {
-         return terser(s_TEST_CONFIG);
+         const config = PluginLoader._loadConfig();
+
+         if (config !== null)
+         {
+            return terser(config);
+         }
       }
+   }
+
+   /**
+    * Attempt to load a local configuration file or provide the default configuration.
+    *
+    * @returns {object} Either the default Terser configuration file or a locally provided configuration file.
+    * @private
+    */
+   static _loadConfig()
+   {
+      const localConfig = FileUtil.openLocalConfigs('terser.config', ['.js', '.json'],
+       `${PluginLoader.pluginName} loading local config failed - `);
+
+      if (localConfig !== null)
+      {
+         if (typeof localConfig.data === 'object')
+         {
+            global.$$eventbus.trigger('log:verbose',
+             'plugin-terser: deferring to local Terser configuration file(s).');
+
+            return localConfig.data;
+         }
+         else
+         {
+            global.$$eventbus.trigger('log:warn',
+             `plugin-terser: local Terser configuration file malformed; expected an 'object':\n`
+            + `${localConfig.relativePath}`);
+
+            return s_DEFAULT_CONFIG;
+         }
+      }
+
+      return s_DEFAULT_CONFIG;
    }
 
    /**
