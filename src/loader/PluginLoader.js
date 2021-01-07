@@ -1,6 +1,9 @@
 const { terser }     = require('rollup-plugin-terser');
 const { flags }      = require('@oclif/command');
 
+const s_LOCAL_CONFIG_BASENAME = 'terser.config';
+const s_LOCAL_CONFIG_EXTENSIONS = ['.js', '.mjs', '.json'];
+
 const s_DEFAULT_CONFIG = {
    compress: {
       booleans_as_integers: true,
@@ -83,11 +86,11 @@ class PluginLoader
     *
     * @returns {object} Rollup plugin
     */
-   static getOutputPlugin(bundleData = {})
+   static async getOutputPlugin(bundleData = {})
    {
       if (bundleData.cliFlags && bundleData.cliFlags.compress === true)
       {
-         const config = PluginLoader._loadConfig(bundleData.cliFlags);
+         const config = await PluginLoader._loadConfig(bundleData.cliFlags);
 
          if (config !== null)
          {
@@ -104,7 +107,7 @@ class PluginLoader
     * @returns {object} Either the default Terser configuration file or a locally provided configuration file.
     * @private
     */
-   static _loadConfig(cliFlags)
+   static async _loadConfig(cliFlags)
    {
       if (typeof cliFlags['ignore-local-config'] === 'boolean' && cliFlags['ignore-local-config'])
       {
@@ -112,8 +115,9 @@ class PluginLoader
       }
 
       // Attempt to load any local configuration files via FileUtil.
-      const localConfig = global.$$eventbus.triggerSync('typhonjs:oclif:system:file:util:configs:local:open',
-       'terser.config', ['.js', '.json'], `${PluginLoader.pluginName} loading local config failed - `);
+      const localConfig = await global.$$eventbus.triggerSync('typhonjs:oclif:system:file:util:configs:local:open',
+       s_LOCAL_CONFIG_BASENAME, s_LOCAL_CONFIG_EXTENSIONS,
+        `${PluginLoader.pluginName} loading local configuration file failed...`);
 
       if (localConfig !== null)
       {
@@ -139,6 +143,10 @@ class PluginLoader
 
             return s_DEFAULT_CONFIG;
          }
+      }
+      else
+      {
+         global.$$eventbus.trigger('log:warn', `${PluginLoader.pluginName}: loading default configuration.`);
       }
 
       return s_DEFAULT_CONFIG;
