@@ -1,6 +1,9 @@
 const { terser }     = require('rollup-plugin-terser');
 const { flags }      = require('@oclif/command');
 
+const s_CONFLICT_PACKAGES = ['rollup-plugin-terser'];
+const s_PACKAGE_NAME = '@typhonjs-node-rollup/plugin-terser';
+
 const s_DEFAULT_CONFIG = {
    compress: {
       booleans_as_integers: true,
@@ -23,18 +26,18 @@ const s_DEFAULT_CONFIG = {
 class PluginLoader
 {
    /**
+    * Returns the any modules that cause a conflict.
+    *
+    * @returns {string[]}
+    */
+   static get conflictPackages() { return s_CONFLICT_PACKAGES; }
+
+   /**
     * Returns the `package.json` module name.
     *
     * @returns {string}
     */
-   static get pluginName() { return '@typhonjs-node-rollup/plugin-terser'; }
-
-   /**
-    * Returns the rollup plugins managed.
-    *
-    * @returns {string[]}
-    */
-   static get rollupPlugins() { return ['rollup-plugin-terser']; }
+   static get packageName() { return s_PACKAGE_NAME; }
 
    /**
     * Adds flags for various built in commands like `bundle`.
@@ -47,32 +50,26 @@ class PluginLoader
     */
    static addFlags(command, eventbus)
    {
-      switch (command)
-      {
-         // Add all built in flags for the build command.
-         case 'bundle':
-            eventbus.trigger('typhonjs:oclif:system:flaghandler:add', {
-               command,
-               plugin: PluginLoader.pluginName,
-               flags: {
-                  // By default compress is set to true, but if the environment variable `{prefix}_COMPRESS` is defined
-                  // as 'true' or 'false' that will determine the setting for compress.
-                  compress: flags.boolean({
-                     'description': '[default: true] Compress output using Terser.',
-                     'allowNo': true,
-                     'default': function()
-                     {
-                        const envVar = `${global.$$flag_env_prefix}_COMPRESS`;
+      eventbus.trigger('typhonjs:oclif:system:flaghandler:add', {
+         command: 'bundle',
+         pluginName: PluginLoader.packageName,
+         flags: {
+            // By default compress is set to true, but if the environment variable `{prefix}_COMPRESS` is defined
+            // as 'true' or 'false' that will determine the setting for compress.
+            compress: flags.boolean({
+               'description': '[default: true] Compress output using Terser.',
+               'allowNo': true,
+               'default': function()
+               {
+                  const envVar = `${global.$$flag_env_prefix}_COMPRESS`;
 
-                        if (process.env[envVar] === 'true') { return true; }
+                  if (process.env[envVar] === 'true') { return true; }
 
-                        return process.env[envVar] !== 'false';
-                     }
-                  })
+                  return process.env[envVar] !== 'false';
                }
-            });
-            break;
-      }
+            })
+         }
+      });
    }
 
    /**
@@ -113,7 +110,7 @@ class PluginLoader
 
       const result = await global.$$eventbus.triggerAsync('typhonjs:oclif:system:file:util:config:open', {
          moduleName: 'terser',
-         errorMessage: `${PluginLoader.pluginName} loading local configuration file failed...`
+         errorMessage: `${PluginLoader.packageName} loading local configuration file failed...`
       });
 
       if (result !== null)
@@ -122,28 +119,24 @@ class PluginLoader
          {
             if (Object.keys(result.config).length === 0)
             {
-               global.$$eventbus.trigger('log:warn', `${PluginLoader.pluginName}: local Terser configuration file `
-               + `empty using default config:\n${result.relativePath}`);
+               global.$$eventbus.trigger('log:warn', `${PluginLoader.packageName}: local Terser configuration file `
+              + `empty using default config:\n${result.relativePath}`);
 
                return s_DEFAULT_CONFIG;
             }
 
             global.$$eventbus.trigger('log:verbose',
-             `${PluginLoader.pluginName}: deferring to local Terser configuration file.`);
+             `${PluginLoader.packageName}: deferring to local Terser configuration file.`);
 
             return result.config;
          }
          else
          {
-            global.$$eventbus.trigger('log:warn', `${PluginLoader.pluginName}: local Terser configuration file `
-            + `malformed using default config; expected an 'object':\n${result.relativePath}`);
+            global.$$eventbus.trigger('log:warn', `${PluginLoader.packageName}: local Terser configuration file `
+           + `malformed using default config; expected an 'object':\n${result.relativePath}`);
 
             return s_DEFAULT_CONFIG;
          }
-      }
-      else
-      {
-         global.$$eventbus.trigger('log:warn', `${PluginLoader.pluginName}: loading default configuration.`);
       }
 
       return s_DEFAULT_CONFIG;
