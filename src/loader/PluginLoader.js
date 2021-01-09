@@ -84,62 +84,15 @@ class PluginLoader
    {
       if (bundleData.cliFlags && bundleData.cliFlags.compress === true)
       {
-         const config = await PluginLoader._loadConfig(bundleData.cliFlags);
+         const config = await global.$$eventbus.triggerAsync('typhonjs:oclif:system:file:util:config:open:safe', {
+            cliFlags: bundleData.cliFlags,
+            moduleName: 'terser',
+            packageName: PluginLoader.packageName,
+            defaultConfig: s_DEFAULT_CONFIG
+         });
 
-         if (config !== null)
-         {
-            return terser(config);
-         }
+         return terser(config);
       }
-   }
-
-   /**
-    * Attempt to load a local configuration file or provide the default configuration.
-    *
-    * @param {object} cliFlags - The CLI flags.
-    *
-    * @returns {object} Either the default Terser configuration file or a locally provided configuration file.
-    * @private
-    */
-   static async _loadConfig(cliFlags)
-   {
-      if (typeof cliFlags['ignore-local-config'] === 'boolean' && cliFlags['ignore-local-config'])
-      {
-         return s_DEFAULT_CONFIG;
-      }
-
-      const result = await global.$$eventbus.triggerAsync('typhonjs:oclif:system:file:util:config:open', {
-         moduleName: 'terser',
-         errorMessage: `${PluginLoader.packageName} loading local configuration file failed...`
-      });
-
-      if (result !== null)
-      {
-         if (typeof result.config === 'object')
-         {
-            if (Object.keys(result.config).length === 0)
-            {
-               global.$$eventbus.trigger('log:warn', `${PluginLoader.packageName}: local Terser configuration file `
-              + `empty using default config:\n${result.relativePath}`);
-
-               return s_DEFAULT_CONFIG;
-            }
-
-            global.$$eventbus.trigger('log:verbose',
-             `${PluginLoader.packageName}: deferring to local Terser configuration file.`);
-
-            return result.config;
-         }
-         else
-         {
-            global.$$eventbus.trigger('log:warn', `${PluginLoader.packageName}: local Terser configuration file `
-           + `malformed using default config; expected an 'object':\n${result.relativePath}`);
-
-            return s_DEFAULT_CONFIG;
-         }
-      }
-
-      return s_DEFAULT_CONFIG;
    }
 
    /**
