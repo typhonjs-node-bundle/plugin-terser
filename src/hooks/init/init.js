@@ -1,4 +1,4 @@
-const PluginLoader = require('../../loader/PluginLoader');
+import PluginLoader from '../../loader/PluginLoader.js';
 
 /**
  * Oclif init hook to add PluginHandler to plugin manager.

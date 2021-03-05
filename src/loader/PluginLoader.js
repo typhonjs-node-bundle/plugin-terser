@@ -1,5 +1,5 @@
-const { terser }     = require('rollup-plugin-terser');
-const { flags }      = require('@oclif/command');
+import { terser } from 'rollup-plugin-terser';
+import { flags }  from '@oclif/command';
 
 const s_CONFLICT_PACKAGES = ['rollup-plugin-terser'];
 const s_PACKAGE_NAME = '@typhonjs-node-rollup/plugin-terser';
@@ -23,7 +23,7 @@ const s_DEFAULT_CONFIG = {
  * Handles interfacing with the plugin manager adding event bindings to pass back a configured
  * instance of `rollup-plugin-terser`.
  */
-class PluginLoader
+export default class PluginLoader
 {
    /**
     * Returns the any modules that cause a conflict.
@@ -112,5 +112,3 @@ class PluginLoader
       PluginLoader.addFlags(ev.pluginOptions.id, ev.eventbus);
    }
 }
-
-module.exports = PluginLoader;
