@@ -59,8 +59,9 @@ export default class PluginLoader
             compress: flags.boolean({
                'description': '[default: true] Compress output using Terser.',
                'allowNo': true,
-               'default': function(envVars = process.env)
+               'default': function(context)
                {
+                  const envVars = context === null ? {} : process.env;
                   const envVar = `${global.$$flag_env_prefix}_COMPRESS`;
 
                   let defaultValue = true;
@@ -109,11 +110,13 @@ export default class PluginLoader
     *
     * @ignore
     */
-   static onPluginLoad(ev)
+   static async onPluginLoad(ev)
    {
       ev.eventbus.on('typhonjs:oclif:bundle:plugins:main:output:get', PluginLoader.getOutputPlugin, PluginLoader);
       ev.eventbus.on('typhonjs:oclif:bundle:plugins:npm:output:get', PluginLoader.getOutputPlugin, PluginLoader);
 
-      PluginLoader.addFlags(ev.eventbus, ev.pluginOptions.flags);
+      const flags = await import(ev.pluginOptions.flagsModule);
+
+      PluginLoader.addFlags(ev.eventbus, flags);
    }
 }
