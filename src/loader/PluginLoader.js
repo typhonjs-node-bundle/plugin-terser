@@ -1,5 +1,4 @@
 import { terser } from 'rollup-plugin-terser';
-import { flags }  from '@oclif/command';
 
 const s_CONFLICT_PACKAGES = ['rollup-plugin-terser'];
 const s_PACKAGE_NAME = '@typhonjs-node-rollup/plugin-terser';
@@ -45,10 +44,11 @@ export default class PluginLoader
     * Added flags include:
     * `--compress`  - Indicates that the output should be compressed.  - default: true - env: {prefix}_COMPRESS'
     *
-    * @param {string} command - ID of the command being run.
     * @param {object} eventbus - The eventbus to add flags to.
+    *
+    * @param {object} flags - The Oclif flags generator.
     */
-   static addFlags(command, eventbus)
+   static addFlags(eventbus, flags)
    {
       eventbus.trigger('typhonjs:oclif:system:flaghandler:add', {
          command: 'bundle',
@@ -114,6 +114,6 @@ export default class PluginLoader
       ev.eventbus.on('typhonjs:oclif:bundle:plugins:main:output:get', PluginLoader.getOutputPlugin, PluginLoader);
       ev.eventbus.on('typhonjs:oclif:bundle:plugins:npm:output:get', PluginLoader.getOutputPlugin, PluginLoader);
 
-      PluginLoader.addFlags(ev.pluginOptions.id, ev.eventbus);
+      PluginLoader.addFlags(ev.eventbus, ev.pluginOptions.flags);
    }
 }
