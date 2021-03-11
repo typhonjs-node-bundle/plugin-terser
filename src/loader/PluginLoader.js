@@ -62,7 +62,7 @@ export default class PluginLoader
                'default': function(context)
                {
                   const envVars = context === null ? {} : process.env;
-                  const envVar = `${global.$$flag_env_prefix}_COMPRESS`;
+                  const envVar = `${global.$$cli_env_prefix}_COMPRESS`;
 
                   let defaultValue = true;
 

@@ -9,11 +9,7 @@
     "rollup-plugin-terser": "^7.0.0"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "eslint": "^5.16.0",
-    "globby": "^10.0.2",
-    "mocha": "^5.2.0",
-    "nyc": "^14.1.1",
+    "eslint": "^7.0.0",
     "typhonjs-config-eslint": "^0.6.0"
   },
   "peerDependencies": {
