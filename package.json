@@ -5,12 +5,19 @@
   "author": "typhonrt",
   "bugs": "https://github.com/typhonjs-node-rollup/issues/issues",
   "type": "module",
+  "maintainers": [
+    {
+      "name": "Michael Leahy",
+      "email": "support@typhonjs.io",
+      "url": "https://github.com/typhonrt"
+    }
+  ],
   "dependencies": {
     "rollup-plugin-terser": "^7.0.0"
   },
   "devDependencies": {
-    "eslint": "^7.0.0",
-    "typhonjs-config-eslint": "^0.6.0"
+    "@typhonjs-config/eslint-config": "^0.1.0",
+    "eslint": "^7.0.0"
   },
   "peerDependencies": {
     "rollup": "^2.x"
@@ -21,11 +28,13 @@
   "main": "src/loader/PluginLoader.js",
   "files": [
     "/npm-shrinkwrap.json",
-    "/oclif.manifest.json",
     "/src"
   ],
   "homepage": "https://github.com/typhonjs-node-rollup/plugin-terser",
   "keywords": [
+    "typhonjs",
+    "rollup",
+    "terser",
     "oclif-plugin"
   ],
   "license": "MPL-2.0",
@@ -39,6 +48,6 @@
   "repository": "typhonjs-node-rollup/plugin-terser",
   "scripts": {
     "eslint": "eslint .",
-    "test": "nyc mocha --forbid-only \"test/**/*.test.js\""
+    "prepack": "npm run eslint"
   }
 }

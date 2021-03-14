@@ -62,7 +62,7 @@ export default class PluginLoader
                'default': function(context)
                {
                   const envVars = context === null ? {} : process.env;
-                  const envVar = `${global.$$cli_env_prefix}_COMPRESS`;
+                  const envVar = `${globalThis.$$cli_env_prefix}_COMPRESS`;
 
                   let defaultValue = true;
 
@@ -90,7 +90,7 @@ export default class PluginLoader
    {
       if (bundleData.cliFlags && bundleData.cliFlags.compress === true)
       {
-         const config = await global.$$eventbus.triggerAsync('typhonjs:oclif:system:file:util:config:open:safe', {
+         const config = await globalThis.$$eventbus.triggerAsync('typhonjs:oclif:system:file:util:config:open:safe', {
             cliFlags: bundleData.cliFlags,
             moduleName: 'terser',
             packageName: PluginLoader.packageName,
