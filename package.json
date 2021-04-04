@@ -16,14 +16,13 @@
     "rollup-plugin-terser": "^7.0.0"
   },
   "devDependencies": {
-    "@typhonjs-config/eslint-config": "^0.2.0",
-    "eslint": "^7.0.0"
+    "@typhonjs-node-utils/build-test": "^0.1.0"
   },
   "peerDependencies": {
     "rollup": "^2.x"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=14.13.0"
   },
   "main": "src/loader/PluginLoader.js",
   "files": [
