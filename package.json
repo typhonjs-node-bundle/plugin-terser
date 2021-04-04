@@ -1,7 +1,7 @@
 {
   "name": "@typhonjs-node-rollup/plugin-terser",
   "description": "Provides an Oclif plugin to to configure rollup-plugin-terser for rollup-runner.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "typhonrt",
   "bugs": "https://github.com/typhonjs-node-rollup/issues/issues",
   "type": "module",
