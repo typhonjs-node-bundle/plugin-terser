@@ -3,21 +3,6 @@ import { terser } from 'rollup-plugin-terser';
 const s_CONFLICT_PACKAGES = ['rollup-plugin-terser'];
 const s_PACKAGE_NAME = '@typhonjs-node-rollup/plugin-terser';
 
-const s_DEFAULT_CONFIG = {
-   compress: {
-      booleans_as_integers: true,
-      passes: 3
-   },
-
-   mangle: {
-      toplevel: true
-   },
-
-   ecma: 2020,
-
-   module: true
-};
-
 /**
  * Handles interfacing with the plugin manager adding event bindings to pass back a configured
  * instance of `rollup-plugin-terser`.
@@ -94,7 +79,20 @@ export default class PluginLoader
             cliFlags: bundleData.cliFlags,
             moduleName: 'terser',
             packageName: PluginLoader.packageName,
-            defaultConfig: s_DEFAULT_CONFIG
+            defaultConfig: {
+               compress: {
+                  booleans_as_integers: true,
+                  passes: 3
+               },
+
+               mangle: {
+                  toplevel: true
+               },
+
+               ecma: 2020,
+
+               module: true
+            }
          });
 
          return terser(config);
