@@ -53,7 +53,7 @@ export default class PluginLoader
     */
    static addFlags(eventbus, flags)
    {
-      eventbus.trigger('typhonjs:oclif:system:flaghandler:add', {
+      eventbus.trigger('typhonjs:oclif:handler:flag:add', {
          command: 'bundle',
          pluginName: PluginLoader.packageName,
          flags: {
@@ -93,12 +93,24 @@ export default class PluginLoader
    {
       if (bundleData.cliFlags && bundleData.cliFlags.compress === true)
       {
-         const config = await globalThis.$$eventbus.triggerAsync('typhonjs:oclif:system:file:util:config:open:safe', {
-            cliFlags: bundleData.cliFlags,
-            moduleName: 'terser',
-            packageName: PluginLoader.packageName,
-            defaultConfig: s_DEFAULT_CONFIG()
-         });
+         let config;
+
+         // Handle ignoring loading local config files if the CLI flag `--ignore-local-config` is true.
+         if (typeof bundleData.cliFlags['ignore-local-config'] === 'boolean' &&
+            bundleData.cliFlags['ignore-local-config'])
+         {
+            config = s_DEFAULT_CONFIG();
+         }
+         else
+         {
+            config = await globalThis.$$eventbus.triggerAsync('typhonjs:util:cosmiconfig:config:load:safe', {
+               moduleName: 'terser',
+               packageName: PluginLoader.packageName,
+               defaultConfig: s_DEFAULT_CONFIG(),
+               startDir: globalThis.$$cli_baseCWD,
+               stopDir: globalThis.$$cli_origCWD
+            });
+         }
 
          return terser(config);
       }
