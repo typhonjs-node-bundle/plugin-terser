@@ -103,7 +103,7 @@ export default class PluginLoader
          }
          else
          {
-            config = await globalThis.$$eventbus.triggerAsync('typhonjs:util:cosmiconfig:config:load:safe', {
+            config = await globalThis.$$eventbus.triggerAsync('typhonjs:utils:cosmiconfig:config:load:safe', {
                moduleName: 'terser',
                packageName: PluginLoader.packageName,
                defaultConfig: s_DEFAULT_CONFIG(),
@@ -117,11 +117,11 @@ export default class PluginLoader
    }
 
    /**
-    * Wires up PluginHandler on the plugin eventbus.
+    * Wires up PluginLoader on the plugin eventbus.
     *
-    * @param {PluginEvent} ev - The plugin event.
+    * @param {object} ev - PluginInvokeEvent - The plugin event.
     *
-    * @see https://www.npmjs.com/package/typhonjs-plugin-manager
+    * @see https://www.npmjs.com/package/@typhonjs-plugin/manager
     *
     * @ignore
     */

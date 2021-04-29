@@ -1,37 +1,34 @@
 {
-  "name": "@typhonjs-node-rollup/plugin-terser",
+  "name": "@typhonjs-oclif-rollup/plugin-terser",
   "description": "Provides an Oclif plugin to to configure rollup-plugin-terser for rollup-runner.",
   "version": "0.0.2",
   "author": "typhonrt",
-  "bugs": "https://github.com/typhonjs-node-rollup/issues/issues",
+  "bugs": "https://github.com/typhonjs-oclif-rollup/issues/issues",
   "type": "module",
-  "maintainers": [
-    {
-      "name": "Michael Leahy",
-      "email": "support@typhonjs.io",
-      "url": "https://github.com/typhonrt"
-    }
+  "contributors": [
+    "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)"
   ],
   "dependencies": {
     "rollup-plugin-terser": "^7.0.0"
   },
   "devDependencies": {
-    "@typhonjs-node-utils/build-test": "^0.1.0"
+    "@typhonjs-utils/build-test": "^0.1.0"
   },
   "peerDependencies": {
     "rollup": "^2.x"
   },
   "engines": {
-    "node": ">=14.13.0"
+    "node": ">=14.0.0"
   },
   "main": "src/loader/PluginLoader.js",
   "files": [
     "/npm-shrinkwrap.json",
     "/src"
   ],
-  "homepage": "https://github.com/typhonjs-node-rollup/plugin-terser",
+  "homepage": "https://github.com/typhonjs-oclif-rollup/plugin-terser",
   "keywords": [
     "typhonjs",
+    "oclif",
     "rollup",
     "terser",
     "oclif-plugin"
@@ -44,7 +41,7 @@
       ]
     }
   },
-  "repository": "typhonjs-node-rollup/plugin-terser",
+  "repository": "github:typhonjs-oclif-rollup/plugin-terser",
   "scripts": {
     "eslint": "eslint .",
     "prepack": "npm run eslint"
