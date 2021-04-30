@@ -1,7 +1,7 @@
 import { terser } from 'rollup-plugin-terser';
 
 const s_CONFLICT_PACKAGES = ['rollup-plugin-terser'];
-const s_PACKAGE_NAME = '@typhonjs-node-rollup/plugin-terser';
+const s_PACKAGE_NAME = '@typhonjs-oclif-rollup/plugin-terser';
 
 const s_DEFAULT_CONFIG = () =>
 {
@@ -53,7 +53,7 @@ export default class PluginLoader
     */
    static addFlags(eventbus, flags)
    {
-      eventbus.trigger('typhonjs:oclif:handler:flag:add', {
+      eventbus.trigger('typhonjs:oclif:system:handler:flag:add', {
          command: 'bundle',
          pluginName: PluginLoader.packageName,
          flags: {
@@ -82,7 +82,7 @@ export default class PluginLoader
    }
 
    /**
-    * Returns the configured input plugin for `rollup-plugin-terser`
+    * Returns the configured input plugin for `rollup-plugin-terser`.
     *
     * @param {object} bundleData - The CLI config
     * @param {object} bundleData.cliFlags - The CLI flags
