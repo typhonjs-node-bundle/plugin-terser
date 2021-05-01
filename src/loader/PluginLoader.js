@@ -1,4 +1,4 @@
-import PT   from 'rollup-plugin-terser';
+import * as PT from 'rollup-plugin-terser';
 
 const s_CONFLICT_PACKAGES = ['rollup-plugin-terser'];
 const s_PACKAGE_NAME = '@typhonjs-oclif-rollup/plugin-terser';
@@ -132,6 +132,6 @@ export default class PluginLoader
 
       const flags = await import(ev.pluginOptions.flagsModule);
 
-      PluginLoader.addFlags(ev.eventbus, flags);
+      PluginLoader.addFlags(ev.eventbus, flags.default);
    }
 }
