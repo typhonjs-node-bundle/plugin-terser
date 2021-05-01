@@ -1,4 +1,4 @@
-import { terser } from 'rollup-plugin-terser';
+import PT   from 'rollup-plugin-terser';
 
 const s_CONFLICT_PACKAGES = ['rollup-plugin-terser'];
 const s_PACKAGE_NAME = '@typhonjs-oclif-rollup/plugin-terser';
@@ -112,7 +112,7 @@ export default class PluginLoader
             });
          }
 
-         return terser(config);
+         return PT.terser(config);
       }
    }
 
